@@ -50,7 +50,7 @@ close(f)
 close(imfig)
 
 % Preparing the true classes/labels
-true=zeros(10,testbatch);
+known=zeros(10,testbatch);
 for i = 1:testbatch
     t=testlab(i);
     known(t+1,i) = 1;
