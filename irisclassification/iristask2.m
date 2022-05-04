@@ -1,4 +1,5 @@
 %% Prepping data and divding into classes.
+% Assume the reader has read the script for task 1, as it will be the most heavily commented one.
 % remove some features in the feature definition section
 load("class_1");
 load("class_2");
@@ -8,19 +9,18 @@ ntrain=30;
 ntest=20;
 
 %definitions, After running plotfeatures.m and analysing results, we will
-%remove feature 4, or the width of the petals
-features=[1,3,4];
-limit=0.6*5;
-alpha=0.01;
+%remove feature 2, or the width of the petals, and then more
+features=[1,3,4];%Now we do NOT use the full features, feature 2 has been removed
+                % The majority of the change in this task is done here, as the line above this augments the features used.
+limit=0.6;
+alpha=0.001;%Alpha is updated to reach the limit set above
 
 
 nfeat=length(features);
 nclass=3;
 
 %seperating training and testing data
-% To do task1a switch the indexes in these lines to fit the assigned 
-% data-points
-c1train=class_1(1:ntrain,features);
+c1train=class_1(1:ntrain,features);%Here we load the training data with the features defined above
 c1test=class_1(1+ntrain:ntrain+ntest,features);
 
 c2train=class_2(1:ntrain,features);
@@ -43,7 +43,7 @@ grad_W_MSE_k = @(gk, tk, xk) ( (gk - tk) .* gk .* (1 - gk) ) * xk';
 sigmoid=@(x) (1./(1+exp(-x)));
 %% Training the model
 lim=limit;
-t=[kron(ones(1,ntrain),T1),kron(ones(1,ntrain),T2),kron(ones(1,ntrain),T3)];
+t=[kron(ones(1,ntrain),T1),kron(ones(1,ntrain),T2),kron(ones(1,ntrain),T3)];%We still use a one-hot structure.
 w=eye(nclass,nfeat+1);
 condition=1;
 iterations=0;
@@ -61,9 +61,8 @@ while condition
     norm(W_MSE)
     condition=norm(W_MSE)>=lim;
     iterations=iterations+1;
-
-    a=alpha;
-    w=w-a*W_MSE;
+    
+    w=w-alpha*W_MSE;
 end
 timespent=toc;
 fprintf('Training complete!\n Spent %3.6f s training \n',timespent)
@@ -72,7 +71,7 @@ fprintf('Used %i iterations to train!\n',iterations)
 %% Testing the model trained above, and plotting results in a confusion matrix.
 % Predictions available in test_pred, amount of correct classifications in
 % ccn, where n is the class.
-test_known=[kron(ones(1,ntest),T1),kron(ones(1,ntest),T2),kron(ones(1,ntest),T3)];
+test_known=[kron(ones(1,ntest),T1),kron(ones(1,ntest),T2),kron(ones(1,ntest),T3)];%Note that the data has to be in a one-hot structure
 test_pred=zeros(size(test_known));
 
 for i=1:length(test)
@@ -93,17 +92,17 @@ end
 figure(1);
 % Please note that the plotconfusion requires the deeplearning toolbox for
 % matlab
-plotconfusion(test_known,test_pred,'Test set, alpha=0.01');
+plotconfusion(test_known,test_pred,'Test set,reduced features');
 titl = get(get(gca,'title'),'string');
-title({titl, ['30 last points training,20 first points testing, alpha=0.01']});
+title({titl, ['30 last points training,20 first points testing, alpha=0.001']});
 xticklabels({'Setosa', 'Versicolour', 'Virginica'});
 yticklabels({'Setosa', 'Versicolour', 'Virginica'});
 
 
 figure(2);
-plotconfusion(t,train_pred,'Training set');
+plotconfusion(t,train_pred,'Training set, reduced features');
 titl = get(get(gca,'title'),'string');
-title({titl, '30 last points training,20 first points testing, alpha=0.01'});
+title({titl, '30 last points training,20 first points testing, alpha=0.001'});
 xticklabels({'Setosa', 'Versicolour', 'Virginica'});
 yticklabels({'Setosa', 'Versicolour', 'Virginica'});
 
