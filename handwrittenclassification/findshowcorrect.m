@@ -1,5 +1,10 @@
 %% Preparing correctly prepared images
 % assume this is run after "findshowmistakes.m"
+
+%This is pretty much the same script as findshowmistakes, but with a different method of selecting images
+%We just pick a "random" image, and then check if it is missclassified. if it is wejust pick a new one.
+
+
 %find "random" correctly identified images
 %rng(5679003) random number chosen as seed, just if we want to controll
 %reproducability
@@ -15,9 +20,9 @@ end
 % happens
 %% Plotting found images
 figure("Name",'Correctly classified images','NumberTitle','off')
-for i=1:15;
+for i=1:10;
     X=zeros(28,28);
-    subplot(3,5,i)
+    subplot(2,5,i)
     index=cind(i);
     X(:)=testv(index,:);
     x=fliplr(imrotate(X,270));
