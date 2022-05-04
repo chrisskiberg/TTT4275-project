@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Reading the iris.data file, and extracting the data to a list
+# Reads the iris.data file, and extracts the data to the list data_arr
 file = open("iris.data", "r")
 data_arr=[]
 for line in file:
@@ -15,10 +15,8 @@ for line in file:
         # print(data_subarr)
         data_arr.append(data_subarr)
 file.close()
-# print(data_arr)
-data_arr_np=np.array(data_arr)
 
-
+# Creates a list with all values for each feature
 sepal_length_arr=[]
 sepal_width_arr=[]
 petal_length_arr=[]
@@ -31,14 +29,8 @@ for iris in data_arr:
     petal_width_arr.append(iris[3])
 
 
-# print(sepal_length_arr)
-# print(sepal_width_arr)
-# print(petal_length_arr)
-# print(petal_width_arr)
-
-
-# Produces a histogram of the sepal length for each class
 plt.style.use('seaborn-deep')
+# Produces a histogram of the sepal length for each class
 sepal_length_n, sepal_length_bins, sepal_length_patches = plt.hist([sepal_length_arr[0:49],sepal_length_arr[50:99], sepal_length_arr[100:149]], 25, stacked=True, label=['Setosa','Versicolor','Virginica'], density=True, alpha=0.55, edgecolor='black', linewidth=1.2)
 
 plt.tight_layout()
@@ -54,7 +46,6 @@ plt.show()
 
 
 # Produces a histogram of the sepal width for each class
-plt.style.use('seaborn-deep')
 sepal_width_n, sepal_width_bins, sepal_width_patches = plt.hist([sepal_width_arr[0:49],sepal_width_arr[50:99], sepal_width_arr[100:149]], 25, stacked=True, label=['Setosa','Versicolor','Virginica'], density=True, alpha=0.55, edgecolor='black', linewidth=1.2)
 
 plt.tight_layout()
@@ -70,7 +61,6 @@ plt.show()
 
 
 # Produces a histogram of the petal length for each class
-plt.style.use('seaborn-deep')
 petal_length_n, petal_length_bins, petal_length_patches = plt.hist([petal_length_arr[0:49],petal_length_arr[50:99], petal_length_arr[100:149]], 25, stacked=True, label=['Setosa','Versicolor','Virginica'], density=True, alpha=0.55, edgecolor='black', linewidth=1.2)
 
 plt.tight_layout()
@@ -86,7 +76,6 @@ plt.show()
 
 
 # Produces a histogram of the petal width for each class
-plt.style.use('seaborn-deep')
 petal_width_n, petal_width_bins, petal_width_patches = plt.hist([petal_width_arr[0:49],petal_width_arr[50:99], petal_width_arr[100:149]], 25, stacked=True, label=['Setosa','Versicolor','Virginica'], density=True, alpha=0.55, edgecolor='black', linewidth=1.2)
 
 plt.tight_layout()
