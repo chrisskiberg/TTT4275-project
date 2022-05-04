@@ -5,7 +5,7 @@ load("data_all.mat");
 %full test/train data lengths
 ntest=size(testv,1);
 ntrain=size(trainv,1);
-message='\nThis script will classify digits usign data from assigned.\nClassification is done with NN-alogrithm\n';
+message='\nThis script will classify digits using data from assigned.\nClassification is done with NN-alogrithm\n';
 fprintf(message)
 %creating batches
 testbatch=ntest/1;
