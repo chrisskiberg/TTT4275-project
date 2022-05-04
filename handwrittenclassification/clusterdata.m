@@ -6,7 +6,7 @@ load full_set.mat
 sorteddata=cell(10,1);
 
 M=64;%From task
-clusters=cell(10,1);
+clusters=cell(10,1);%Initiate variable so that we can cluster properly.
 
 
 %% Sort data into correct labels
@@ -18,14 +18,14 @@ end
 fprintf('\nClustering, please hold. Will spend ~30 seconds \n')
 tic;
 for i=1:10
-    [temp,C_i]=kmeans(sorteddata{i},M);
+    [temp,C_i]=kmeans(sorteddata{i},M);%Kmeans command clsuters data into k=64 clusters
     clusters{i}=C_i;
 end
 timespent=toc;
 clear temp;
 fprintf('Finished clustering.\nSpent %2.2f seconds clustering\n',timespent)
 
-clustereddata=cell2mat(clusters);
+clustereddata=cell2mat(clusters);%go back to matrix from cell datatype.
 
 %% We now need to create the knowns for the clusters.
 % Since M=64, the first 64 are 0, second 64 is 1 etc.
