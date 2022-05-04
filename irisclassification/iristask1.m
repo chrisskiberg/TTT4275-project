@@ -8,8 +8,8 @@ ntrain=30;
 ntest=20;
 
 %definitions
-nfeat=4;
-nclass=3;
+nfeat=4; % Using full feature set
+nclass=3;% 3 classes since there are three flowers
 
 limit=0.6;
 alpha=0.01;
@@ -36,10 +36,10 @@ c3test=class_3(ntrain+1:ntest+ntrain,:);
 % c3test=class_3(1:ntest,:);
 
 %Collecting data and defining targets
-training=[c1train;c2train;c3train];
-test=[c1test;c2test;c3test];
+training=[c1train;c2train;c3train];%All training data for all classes is collected here, first class 1 then class2 etc
+test=[c1test;c2test;c3test];%Mirrors set above, but with Test data
 
-T1=[1;0;0];
+T1=[1;0;0];%These arefor setting up the labels later. 
 T2=[0;1;0];
 T3=[0;0;1];
 
@@ -47,26 +47,25 @@ T3=[0;0;1];
 grad_W_MSE_k = @(gk, tk, xk) ( (gk - tk) .* gk .* (1 - gk) ) * xk';
 sigmoid=@(x) (1./(1+exp(-x)));
 %% Training the model
-lim=limit;
-t=[kron(ones(1,ntrain),T1),kron(ones(1,ntrain),T2),kron(ones(1,ntrain),T3)];
+
+t=[kron(ones(1,ntrain),T1),kron(ones(1,ntrain),T2),kron(ones(1,ntrain),T3)];%Here we set up our labels, in the one-hot method.
 w=eye(nclass,nfeat+1);
-condition=1;
+c=1;
 
 fprintf('Training commences \n')
 tic;
-while condition
+while c
     W_MSE=0;
-    for k=1:nclass*ntrain
+    for k=1:nclass*ntrain%Here we realise the theory given in the report.
         xk=[training(k,:)'; 1];
         zk=w*xk;
         gk=sigmoid(zk);
         tk=t(:,k);
         W_MSE=W_MSE+grad_W_MSE_k(gk,tk,xk);
     end
-    condition=norm(W_MSE)>=lim;
+    c=norm(W_MSE)>=limit;
 
-    a=alpha;
-    w=w-a*W_MSE;
+    w=w-alpha*W_MSE;%Update the weights after the entire test set is run through. This could be done at more regular steps, but this was not inlcuded in the task.
 end
 timespent=toc;
 fprintf('Training complete!\n Spent %3.6f s training \n',timespent)
@@ -74,7 +73,7 @@ fprintf('Training complete!\n Spent %3.6f s training \n',timespent)
 %% Testing the model trained above, and plotting results in a confusion matrix.
 % Predictions available in test_pred, amount of correct classifications in
 % ccn, where n is the class.
-test_known=[kron(ones(1,ntest),T1),kron(ones(1,ntest),T2),kron(ones(1,ntest),T3)];
+test_known=[kron(ones(1,ntest),T1),kron(ones(1,ntest),T2),kron(ones(1,ntest),T3)];%Setting up testlabels and again using one-hot.
 test_pred=zeros(size(test_known));
 
 for i=1:length(test)
@@ -95,7 +94,7 @@ end
 figure(1);
 % Please note that the plotconfusion requires the deeplearning toolbox for
 % matlab
-plotconfusion(test_known,test_pred,'Test set, alpha=0.01');
+plotconfusion(test_known,test_pred,'Test set, alpha=0.01');%As mentioned, this function requires the data to be in a one-hot structure, which it is
 titl = get(get(gca,'title'),'string');
 title({titl, ['30 last points training,20 first points testing, alpha=0.01']});
 xticklabels({'Setosa', 'Versicolour', 'Virginica'});
